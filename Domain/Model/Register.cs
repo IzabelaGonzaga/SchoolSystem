@@ -1,4 +1,4 @@
-﻿namespace Escola.Data
+﻿namespace Domain.Model
 {
     public class Register
     {

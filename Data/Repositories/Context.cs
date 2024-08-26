@@ -1,4 +1,5 @@
 ﻿using Data.Map;
+using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Escola.Data.Repositories

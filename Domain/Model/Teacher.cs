@@ -1,6 +1,6 @@
 ﻿using Escola.Data.Entities;
 
-namespace Escola.Data
+namespace Domain.Model
 {
     public class Teacher : IPerson
     {

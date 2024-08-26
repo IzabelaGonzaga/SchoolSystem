@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Domain.Model;
 using Microsoft.EntityFrameworkCore;
-using Escola.Data;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.Map
 {
