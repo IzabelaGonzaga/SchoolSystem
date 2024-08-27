@@ -9,7 +9,7 @@ namespace Domain.Model
         public string Name { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
-        public EuserStatus? Status { get; set; }
+        public EUserStatus? Status { get; set; }
         public List<Register>? Registers { get; set; }
 
         public Student(string name, string email, string address)
@@ -17,7 +17,7 @@ namespace Domain.Model
             Name = name;
             Email = email;
             Address = address;
-            Status = EuserStatus.Active;
+            Status = EUserStatus.Active;
             Registers = [];
         }
     }

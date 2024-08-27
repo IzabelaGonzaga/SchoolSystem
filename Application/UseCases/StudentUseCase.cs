@@ -50,7 +50,7 @@ namespace Application.UseCases
             try
             {
                 var studentEntity = repository.GetById(id);
-                studentEntity.Status = EuserStatus.Inactive;
+                studentEntity.Status = EUserStatus.Inactive;
 
                 repository.Update(studentEntity);
             }

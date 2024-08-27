@@ -1,6 +1,6 @@
 ﻿namespace Domain.Model
 {
-    public enum EuserStatus
+    public enum EUserStatus
     {
         Inactive,
         Active
