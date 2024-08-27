@@ -1,8 +1,8 @@
 ﻿using Application.DTO;
 using Data.Repositories;
 using Domain.Model;
+using Microsoft.IdentityModel.Tokens;
 
-//TODO: deveria ter um uso de caso só para desativar o aluno, sem precisar colocar todos os dados
 namespace Application.UseCases
 {
     public static class StudentUseCase
@@ -17,34 +17,47 @@ namespace Application.UseCases
             return repository.GetAll();
         }
 
-        //TODO:O status aparece no request body não fica como opcional
         public static void AddStudent(IStudentRepository repository, StudentDto studentDto)
         {
-            var student = new Student()
+            if(studentDto.Name.IsNullOrEmpty() || studentDto.Email.IsNullOrEmpty() || studentDto.Address.IsNullOrEmpty())
             {
-                Name = studentDto.Name,
-                Email = studentDto.Email,
-                Address = studentDto.Address,
-                Status = EStatus.Active,
-                Registers = []
-            };
+                throw new Exception("The following user informations are mandatory: name, email and address.");
+            }
 
+            var student = new Student(studentDto.Name, studentDto.Email, studentDto.Address);
             repository.Add(student);
         }
 
         public static void UpdateStudent(IStudentRepository repository, StudentDto studentDto, int id)
         {
-            var studentEntity = repository.GetById(id) ?? throw new Exception("Class not found.");
-            studentEntity = new Student()
+            try
             {
-                Name = studentDto.Name,
-                Email = studentDto.Email,
-                Address = studentDto.Address,
-                Status = EStatus.Active,
-                Registers = studentEntity.Registers,
-            };
+                var studentEntity = repository.GetById(id);
+                studentEntity.Name = studentDto.Name ?? studentEntity.Name;
+                studentEntity.Email = studentDto.Email ?? studentEntity.Email;
+                studentEntity.Address = studentDto.Address ?? studentEntity.Address;
 
-            repository.Update(studentEntity);
+                repository.Update(studentEntity);
+
+            } catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public static void DisableStudent(IStudentRepository repository, int id)
+        {
+            try
+            {
+                var studentEntity = repository.GetById(id);
+                studentEntity.Status = EuserStatus.Inactive;
+
+                repository.Update(studentEntity);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public static void RemoveStudent(IStudentRepository repository, int id)

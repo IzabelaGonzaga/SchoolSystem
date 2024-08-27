@@ -35,7 +35,6 @@ namespace WebApi.Controllers
         public IActionResult Post([FromBody] StudentDto request)
         {
             StudentUseCase.AddStudent(_repository, request);
-
             return Ok();
         }
 
@@ -47,6 +46,22 @@ namespace WebApi.Controllers
             try
             {
                 StudentUseCase.UpdateStudent(_repository, request, id);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPut("disable-student/{id}")]
+        public IActionResult Put(int id)
+        {
+            try
+            {
+                StudentUseCase.DisableStudent(_repository, id);
                 return NoContent();
             }
             catch (Exception)
