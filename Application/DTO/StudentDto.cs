@@ -1,6 +1,4 @@
-﻿using Domain.Model;
-
-namespace Application.DTO;
+﻿namespace Application.DTO;
 
 public class StudentDto
 {

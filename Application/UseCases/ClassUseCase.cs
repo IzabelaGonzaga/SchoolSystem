@@ -2,7 +2,6 @@
 using Data.Repositories;
 using Domain.Model;
 
-//TODO: deveria ter um uso de caso só para desativar a classe, sem precisar colocar todos os dados
 namespace Application.UseCases
 
 {
@@ -35,14 +34,11 @@ namespace Application.UseCases
         public static void UpdateClass(IClassRepository repository, ClassDto classDto, int id)
         {
             var classEntity = repository.GetById(id) ?? throw new Exception("Class not found.");
-            classEntity = new Class()
-            {
-                Title = classDto.Title,
-                Description = classDto.Description,
-                StartDate = classDto.StartDate,
-                Status = EStatus.Active,
-                Registers = classEntity.Registers,
-            };
+
+            classEntity.Title = classDto.Title;
+            classEntity.Description = classDto.Description;
+            classEntity.StartDate = classDto.StartDate;
+            classEntity.Status = EStatus.Active;
 
             repository.Update(classEntity);
         }
@@ -50,6 +46,14 @@ namespace Application.UseCases
         public static void RemoveClass(IClassRepository repository, int id)
         {
             repository.Delete(id);
+        }
+
+        public static void UpdateClassStatus(IClassRepository repository, int id, UpdateStatusRequest request)
+        {
+            var classEntity = repository.GetById(id) ?? throw new Exception("Class not found."); ;
+            classEntity.Status = (EStatus)request.Status;
+
+            repository.Update(classEntity);
         }
     }
 }

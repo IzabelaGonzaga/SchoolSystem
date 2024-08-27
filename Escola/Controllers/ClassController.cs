@@ -70,4 +70,20 @@ public class ClassController : ControllerBase
             return BadRequest();
         }
     }
+
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [HttpPut("change-status/{id}")]
+    public IActionResult UpdateStatus(int id, [FromBody] UpdateStatusRequest request)
+    {
+        try
+        {
+            ClassUseCase.UpdateClassStatus(_repository, id, request);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
+    }
 }
