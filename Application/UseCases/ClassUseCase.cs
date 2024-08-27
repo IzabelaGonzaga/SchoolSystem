@@ -2,6 +2,7 @@
 using Data.Repositories;
 using Domain.Model;
 
+//TODO: deveria ter um uso de caso só para desativar a classe, sem precisar colocar todos os dados
 namespace Application.UseCases
 
 {

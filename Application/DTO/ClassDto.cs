@@ -1,4 +1,6 @@
-﻿namespace Application.DTO;
+﻿using Domain.Model;
+
+namespace Application.DTO;
 
 public class ClassDto
 {

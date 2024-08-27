@@ -1,4 +1,6 @@
-﻿using Application.UseCases;
+﻿using Application.DTO;
+using Application.UseCases;
+using Data.Repositories;
 using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,40 +10,65 @@ namespace WebApi.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
+        public IStudentRepository _repository;
 
-        // POST api/student
-        [HttpPost]
-        public IActionResult Post([FromBody] Student request)
+        public StudentController(IStudentRepository repository)
         {
-            var studentUseCase = new StudentUseCase();
-            studentUseCase.AddStudent(request);
-            return Created();
+            _repository = repository;
         }
 
-        // GET: api/<StudentController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<Student>> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var response = StudentUseCase.GetStudents(_repository);
+            return Ok(response);
         }
 
-        // GET api/<StudentController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<Student> GetById(int id)
         {
-            return "value";
+            var response = StudentUseCase.GetStudentById(_repository, id);
+            return Ok(response);
         }
 
-        // PUT api/<StudentController>/5
+        [HttpPost]
+        public IActionResult Post([FromBody] StudentDto request)
+        {
+            StudentUseCase.AddStudent(_repository, request);
+
+            return Ok();
+        }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] StudentDto request)
         {
+            try
+            {
+                StudentUseCase.UpdateStudent(_repository, request, id);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
-        // DELETE api/<StudentController>/5
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            try
+            {
+                StudentUseCase.RemoveStudent(_repository, id);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ using Escola.Data.Entities;
 
 namespace Domain.Model
 {
-    public class Student: IPerson, IEntity
+    public class Student : IPerson, IEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
