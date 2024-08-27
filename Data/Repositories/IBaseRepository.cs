@@ -4,9 +4,9 @@
     {
         T GetById(int id);
 
-        void Add(T entidade);
+        void Add(T entity);
 
-        void Update(T entidade);
+        void Update(T entity);
 
         List<T> GetAll();
 

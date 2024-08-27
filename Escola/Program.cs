@@ -1,3 +1,4 @@
+using Data.Repositories;
 using Escola.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>)); // injenção de depedencias, assim a controller, ex aluno depende menos da classe instacianda alunorepository
+builder.Services.AddScoped<StudentRepository, StudentRepository>();
+builder.Services.AddScoped<IClassRepository, ClassRepository>();
 
 builder.Services.AddDbContext<Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MinhaConexao")));
 

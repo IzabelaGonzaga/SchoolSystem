@@ -1,6 +1,8 @@
-﻿namespace Domain.Model
+﻿using Domain.Entities;
+
+namespace Domain.Model
 {
-    public class Class
+    public class Class : IEntity
     {
         public int Id { get; set; }
         public string Title { get; set; }
