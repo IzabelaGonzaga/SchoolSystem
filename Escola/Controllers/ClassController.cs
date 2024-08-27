@@ -1,6 +1,7 @@
 ﻿using Application.DTO;
 using Application.UseCases;
 using Data.Repositories;
+using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -16,37 +17,57 @@ public class ClassController : ControllerBase
         _repository = repository;
     }
 
+    [HttpGet]
+    public ActionResult<IEnumerable<Student>> GetAll()
+    {
+        var response = ClassUseCase.GetClasses(_repository);
+        return Ok(response);
+    }
+
+    [HttpGet("{id}")]
+    public ActionResult<Student> GetById(int id)
+    {
+        var response = ClassUseCase.GetClassById(_repository, id);
+        return Ok(response);
+    }
+
     [HttpPost]
     public IActionResult Post([FromBody] ClassDto request)
     {
-        ClassUseCase.AddClass(request, _repository);
+        ClassUseCase.AddClass(_repository, request);
 
-        return Created();
+        return Ok();
     }
 
-    // GET: api/<ClassController>
-    [HttpGet]
-    public IEnumerable<string> Get()
-    {
-        return new string[] { "value1", "value2" };
-    }
-
-    // GET api/<ClassController>/5
-    [HttpGet("{id}")]
-    public string Get(int id)
-    {
-        return "value";
-    }
-
-    // PUT api/<ClassController>/5
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public IActionResult Put(int id, [FromBody] ClassDto request)
     {
+        try
+        {
+            ClassUseCase.UpdateClass(_repository, request, id);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
     }
 
-    // DELETE api/<ClassController>/5
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public IActionResult Delete(int id)
     {
+        try
+        {
+            ClassUseCase.RemoveClass(_repository, id);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
     }
 }
