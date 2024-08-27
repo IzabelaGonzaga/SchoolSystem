@@ -27,8 +27,8 @@ namespace Application.UseCases
                 StudentId = RegisterDto.StudentId,
                 ClassId = RegisterDto.ClassId,
                 Status = EStatus.Active,
-                //Class ? Precisa de class ou entity adiciona automaticamente?
-                //Student ? Precisa de class ou entity adiciona automaticamente?
+                //TODO: Class ? Precisa de class, aparetemente o entity não adiciona automaticamente
+                //TODO: Student ? Precisa de student, aparetemente o entity não adiciona automaticamente
             };
 
             repository.Add(RegisterEntity);
@@ -36,18 +36,13 @@ namespace Application.UseCases
 
         public static void UpdateRegister(IRegisterRepository repository, RegisterDto RegisterDto, int id)
         {
-            var RegisterEntity = repository.GetById(id) ?? throw new Exception("Register not found.");
-            RegisterEntity = new Register()
-            {
-                RegisterDate = RegisterEntity.RegisterDate,
-                StudentId = RegisterDto.StudentId,
-                ClassId = RegisterDto.ClassId,
-                Status = RegisterDto.Status,
-                Class = RegisterEntity.Class,
-                Student = RegisterEntity.Student,
-            };
+            var registerEntity = repository.GetById(id) ?? throw new Exception("Register not found.");
 
-            repository.Update(RegisterEntity);
+            registerEntity.StudentId = RegisterDto.StudentId;
+            registerEntity.ClassId = RegisterDto.ClassId;
+            registerEntity.Status = RegisterDto.Status;
+
+            repository.Update(registerEntity);
         }
 
         public static void RemoveRegister(IRegisterRepository repository, int id)
