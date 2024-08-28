@@ -3,7 +3,6 @@ using Data.Repositories;
 using Domain.Model;
 
 namespace Application.UseCases
-
 {
     public static class RegisterUseCase
     {
@@ -23,30 +22,11 @@ namespace Application.UseCases
             // 30 matriculas por curso, verficar matriculas ativas.
 
             var classEntity = repository3.GetById(RegisterDto.ClassId);
-
             var studentEntity = repository2.GetById(RegisterDto.StudentId);
 
-            //TODO: adicionar regras;
-            bool isAllowedToRegister = true;
+            var RegisterEntity = Register.NewRegister(RegisterDto.StartDate, classEntity.Id, classEntity.Status, studentEntity.Id, studentEntity.Status);
 
-            if (isAllowedToRegister)
-            {
-                var RegisterEntity = new Register()
-                {
-                    RegisterDate = DateTime.Now,
-                    StudentId = RegisterDto.StudentId,
-                    ClassId = RegisterDto.ClassId,
-                    Status = EStatus.Active,
-                    Student = studentEntity,
-                    Class = classEntity,
-                };
-
-                repository.Add(RegisterEntity);
-            }
-            else
-            {
-                throw new Exception("Not allowed");
-            }
+            repository.Add(RegisterEntity);
         }
 
         public static void UpdateRegister(IRegisterRepository repository, RegisterDto RegisterDto, int id)

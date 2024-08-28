@@ -1,5 +1,6 @@
 ﻿using Domain.Model;
 using Escola.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
