@@ -17,21 +17,36 @@ namespace Application.UseCases
             return repository.GetAll();
         }
 
-        public static void AddRegister(IRegisterRepository repository, RegisterDto RegisterDto)
+        public static void AddRegister(IRegisterRepository repository, IStudentRepository repository2, IClassRepository repository3, RegisterDto RegisterDto)
         {
             //TODO: Para que uma matrícula possa ser concluída, é necessário que o curso esteja ativo, a turma possua vaga e a data de inicio seja maior que hoje e que o aluno esteja ativo.
             // 30 matriculas por curso, verficar matriculas ativas.
-            var RegisterEntity = new Register()
-            {
-                RegisterDate = DateTime.Now,
-                StudentId = RegisterDto.StudentId,
-                ClassId = RegisterDto.ClassId,
-                Status = EStatus.Active,
-                //TODO: Class ? Precisa de class, aparetemente o entity não adiciona automaticamente
-                //TODO: Student ? Precisa de student, aparetemente o entity não adiciona automaticamente
-            };
 
-            repository.Add(RegisterEntity);
+            var classEntity = repository3.GetById(RegisterDto.ClassId);
+
+            var studentEntity = repository2.GetById(RegisterDto.StudentId);
+
+            //TODO: adicionar regras;
+            bool isAllowedToRegister = true;
+
+            if (isAllowedToRegister)
+            {
+                var RegisterEntity = new Register()
+                {
+                    RegisterDate = DateTime.Now,
+                    StudentId = RegisterDto.StudentId,
+                    ClassId = RegisterDto.ClassId,
+                    Status = EStatus.Active,
+                    Student = studentEntity,
+                    Class = classEntity,
+                };
+
+                repository.Add(RegisterEntity);
+            }
+            else
+            {
+                throw new Exception("Not allowed");
+            }
         }
 
         public static void UpdateRegister(IRegisterRepository repository, RegisterDto RegisterDto, int id)
@@ -40,7 +55,7 @@ namespace Application.UseCases
 
             registerEntity.StudentId = RegisterDto.StudentId;
             registerEntity.ClassId = RegisterDto.ClassId;
-            registerEntity.Status = RegisterDto.Status;
+            registerEntity.Status = (EStatus)RegisterDto.Status;
 
             repository.Update(registerEntity);
         }

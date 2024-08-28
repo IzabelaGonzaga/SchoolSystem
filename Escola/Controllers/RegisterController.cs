@@ -12,10 +12,14 @@ namespace WebApi.Controllers;
 public class RegisterController : ControllerBase
 {
     public IRegisterRepository _repository;
+    public IStudentRepository _repository2;
+    public IClassRepository _repository3;
 
-    public RegisterController(IRegisterRepository repository)
+    public RegisterController(IRegisterRepository repository, IStudentRepository repository2, IClassRepository repository3)
     {
         _repository = repository;
+        _repository2 = repository2;
+        _repository3 = repository3;
     }
 
     [HttpGet]
@@ -35,7 +39,7 @@ public class RegisterController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] RegisterDto request)
     {
-        RegisterUseCase.AddRegister(_repository, request);
+        RegisterUseCase.AddRegister(_repository, _repository2, _repository3, request);
 
         return Ok();
     }

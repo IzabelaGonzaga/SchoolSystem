@@ -1,10 +1,8 @@
-﻿using Domain.Model;
-
-namespace Application.DTO;
+﻿namespace Application.DTO;
 
 public class RegisterDto
 {
+    public int Status { get; set; }
     public int StudentId { get; set; }
     public int ClassId { get; set; }
-    public EStatus Status { get; set; }
 }
