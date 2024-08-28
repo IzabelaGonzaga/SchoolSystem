@@ -18,13 +18,13 @@ namespace Application.UseCases
 
         public static void AddRegister(IRegisterRepository repository, IStudentRepository repository2, IClassRepository repository3, RegisterDto RegisterDto)
         {
-            //TODO: Para que uma matrícula possa ser concluída, é necessário que o curso esteja ativo, a turma possua vaga e a data de inicio seja maior que hoje e que o aluno esteja ativo.
+            //TODO: Para que uma matrícula possa ser concluída, é necessário que a turma possua vaga.
             // 30 matriculas por curso, verficar matriculas ativas.
 
             var classEntity = repository3.GetById(RegisterDto.ClassId);
             var studentEntity = repository2.GetById(RegisterDto.StudentId);
 
-            var RegisterEntity = Register.NewRegister(RegisterDto.StartDate, classEntity.Id, classEntity.Status, studentEntity.Id, studentEntity.Status);
+            var RegisterEntity = Register.NewRegister(classEntity.StartDate, classEntity.Id, classEntity.Status, studentEntity.Id, studentEntity.Status);
 
             repository.Add(RegisterEntity);
         }
@@ -35,7 +35,8 @@ namespace Application.UseCases
 
             registerEntity.StudentId = RegisterDto.StudentId;
             registerEntity.ClassId = RegisterDto.ClassId;
-            registerEntity.Status = (EStatus)RegisterDto.Status;
+            
+            if(RegisterDto.Status.HasValue) registerEntity.Status = (EStatus)RegisterDto.Status;
 
             repository.Update(registerEntity);
         }
